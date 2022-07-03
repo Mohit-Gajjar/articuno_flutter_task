@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
 }
 
 class StatefulColorfulTile extends StatefulWidget {
-  const StatefulColorfulTile({Key? key}) : super(key: key);
+  final String text;
+  const StatefulColorfulTile({Key? key, required this.text}) : super(key: key);
 
   @override
   State<StatefulColorfulTile> createState() => _StatefulColorfulTileState();
@@ -28,7 +29,6 @@ class StatefulColorfulTile extends StatefulWidget {
 
 class _StatefulColorfulTileState extends State<StatefulColorfulTile> {
   Color? myColor;
-
   @override
   void initState() {
     myColor = Color(
@@ -36,18 +36,19 @@ class _StatefulColorfulTileState extends State<StatefulColorfulTile> {
     ).withOpacity(
       1.0,
     );
-
+    setState(() {});
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: myColor,
-      child: const Padding(
-        padding: EdgeInsets.all(70.0),
-      ),
-    );
+        height: 150,
+        width: 150,
+        color: myColor,
+        child: Center(
+          child: Text(widget.text),
+        ));
   }
 }
 
@@ -59,14 +60,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final containers = [
+  // We have to use keys in the stateful widgets when we are shuffling the widget in a tree, when we are not using keys then the widget won't rebuilt but it changes the updates in a stateful widget, state remains same when are not using the keys.
+  // in this case example if we dont use the keys then only the text is changing, means flutter is updating the changes not rebuilding the whole widget.
+  // when we use keys it rebuilds the widget in widget esspecially when we are shuffling the widgets it uses key to identify the widget hence it does not use the state of same other widget.
+  List<Widget> containers = [
     const Padding(
       padding: EdgeInsets.all(10),
-      child: StatefulColorfulTile(),
+      child: StatefulColorfulTile(
+        text: '1',
+        key: GlobalObjectKey(0),
+      ),
     ),
     const Padding(
       padding: EdgeInsets.all(10),
-      child: StatefulColorfulTile(),
+      child: StatefulColorfulTile(
+        text: '2',
+        key: GlobalObjectKey(1),
+      ),
     )
   ];
 
