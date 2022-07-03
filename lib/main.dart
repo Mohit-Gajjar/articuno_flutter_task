@@ -80,11 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
     )
   ];
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   void swapColour() {
     setState(() {
       containers.insert(1, containers.removeAt(0));
