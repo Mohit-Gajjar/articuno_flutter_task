@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_task/Screens/home.dart';
+import 'dart:math' as math;
 
 void main() {
   runApp(const MyApp());
@@ -7,14 +7,92 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Task',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+      title: 'Assignment',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const HomeScreen(),
+    );
+  }
+}
+
+class StatefulColorfulTile extends StatefulWidget {
+  const StatefulColorfulTile({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulColorfulTile> createState() => _StatefulColorfulTileState();
+}
+
+class _StatefulColorfulTileState extends State<StatefulColorfulTile> {
+  Color? myColor;
+
+  @override
+  void initState() {
+    myColor = Color(
+      (math.Random().nextDouble() * 0xFFFFFF).toInt(),
+    ).withOpacity(
+      1.0,
+    );
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: myColor,
+      child: const Padding(
+        padding: EdgeInsets.all(70.0),
+      ),
+    );
+  }
+}
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final containers = [
+    const Padding(
+      padding: EdgeInsets.all(10),
+      child: StatefulColorfulTile(),
+    ),
+    const Padding(
+      padding: EdgeInsets.all(10),
+      child: StatefulColorfulTile(),
+    )
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void swapColour() {
+    setState(() {
+      containers.insert(1, containers.removeAt(0));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Row(
+          children: containers,
         ),
-        home: const Home());
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => swapColour(),
+        child: const Icon(Icons.change_circle_outlined),
+      ),
+    );
   }
 }
